@@ -1,0 +1,77 @@
+<svg viewBox="0 0 1200 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="BEIR scifact nDCG@10 leaderboard">
+  <defs>
+    <linearGradient id="kapi" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <style>
+      text{font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif}
+      .name{font-size:15px;fill:#0f172a}
+      .val{font-size:14px;font-weight:700;fill:#0f172a}
+      .ax{font-size:12px;fill:#64748b}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="560" rx="16" fill="#ffffff" stroke="#e2e8f0"/>
+
+  <text x="32" y="42" font-size="23" font-weight="800" fill="#0f172a">BEIR scifact · nDCG@10</text>
+  <text x="32" y="68" font-size="15" fill="#475569">No embedding model, no GPU, no vector DB — Kapi (★) ties a 4B dense embedder and beats mid-tier ones, at $0/query.</text>
+
+  <!-- gridlines -->
+  <g stroke="#e2e8f0" stroke-width="1">
+    <line x1="215" y1="96" x2="215" y2="436"/>
+    <line x1="465" y1="96" x2="465" y2="436"/>
+    <line x1="715" y1="96" x2="715" y2="436"/>
+    <line x1="965" y1="96" x2="965" y2="436"/>
+  </g>
+  <g class="ax" text-anchor="middle">
+    <text x="215" y="454">0.60</text>
+    <text x="465" y="454">0.65</text>
+    <text x="715" y="454">0.70</text>
+    <text x="965" y="454">0.75</text>
+  </g>
+
+  <!-- row 0: qwen3-embedding-8b 0.7629 dense -->
+  <text class="name" x="205" y="123" text-anchor="end">qwen3-embedding-8b</text>
+  <rect x="215" y="100" width="814" height="34" rx="5" fill="#cbd5e1"/>
+  <text class="val" x="1037" y="123">0.7629</text>
+
+  <!-- row 1: qwen3-embedding-4b 0.7308 dense -->
+  <text class="name" x="205" y="171" text-anchor="end">qwen3-embedding-4b</text>
+  <rect x="215" y="148" width="654" height="34" rx="5" fill="#cbd5e1"/>
+  <text class="val" x="877" y="171">0.7308</text>
+
+  <!-- row 2: Kapi doc2query x2 0.7291 KAPI (highlight) -->
+  <text class="name" x="205" y="219" text-anchor="end" font-weight="800" fill="#6d28d9">★ Kapi doc2query ×2</text>
+  <rect x="215" y="196" width="645" height="34" rx="5" fill="url(#kapi)"/>
+  <text class="val" x="868" y="219" fill="#6d28d9">0.7291</text>
+
+  <!-- row 3: text-embedding-3-small 0.7164 dense -->
+  <text class="name" x="205" y="267" text-anchor="end">text-embedding-3-small</text>
+  <rect x="215" y="244" width="582" height="34" rx="5" fill="#cbd5e1"/>
+  <text class="val" x="805" y="267">0.7164</text>
+
+  <!-- row 4: Kapi BM25 + trigram 0.6995 KAPI -->
+  <text class="name" x="205" y="315" text-anchor="end" font-weight="700" fill="#6d28d9">Kapi BM25 + trigram</text>
+  <rect x="215" y="292" width="497" height="34" rx="5" fill="url(#kapi)" opacity="0.82"/>
+  <text class="val" x="720" y="315" fill="#6d28d9">0.6995</text>
+
+  <!-- row 5: Kapi-fast lexical 0.6878 KAPI -->
+  <text class="name" x="205" y="363" text-anchor="end" font-weight="700" fill="#6d28d9">Kapi-fast (lexical)</text>
+  <rect x="215" y="340" width="439" height="34" rx="5" fill="url(#kapi)" opacity="0.82"/>
+  <text class="val" x="662" y="363" fill="#6d28d9">0.6878</text>
+
+  <!-- row 6: bge-m3 0.6437 dense -->
+  <text class="name" x="205" y="411" text-anchor="end">bge-m3</text>
+  <rect x="215" y="388" width="218" height="34" rx="5" fill="#cbd5e1"/>
+  <text class="val" x="441" y="411">0.6437</text>
+
+  <!-- legend -->
+  <g>
+    <rect x="215" y="484" width="26" height="15" rx="4" fill="url(#kapi)"/>
+    <text x="250" y="496" font-size="14" fill="#334155">Kapi — no embeddings ($0 or offline-LLM tier)</text>
+    <rect x="640" y="484" width="26" height="15" rx="4" fill="#cbd5e1"/>
+    <text x="675" y="496" font-size="14" fill="#334155">dense embedder (one model pass / query)</text>
+  </g>
+  <text class="ax" x="32" y="530">BEIR scifact · 300 claims · doc-level nDCG@10 · axis starts at 0.60 · full 30-row table → benchmarks/scifact_results.md</text>
+</svg>
