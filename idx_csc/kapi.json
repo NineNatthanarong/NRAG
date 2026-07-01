@@ -1,0 +1,6 @@
+{
+  "kapi_version": "0.1.0",
+  "engine": "tantivy",
+  "language": "english",
+  "enable_ngram": true
+}

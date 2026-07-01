@@ -18,6 +18,9 @@ __all__ = [
     "reciprocal_rank",
     "run_beir",
     "load_beir",
+    "run_bright",
+    "run_bright_all",
+    "load_bright",
     "evaluate_answers",
 ]
 
@@ -27,6 +30,11 @@ def __getattr__(name):
         from . import beir
 
         return getattr(beir, name)
+    if name in ("run_bright", "run_bright_all", "load_bright", "BrightReport",
+                "BRIGHT_SUBSETS", "BRIGHT_REFERENCE"):
+        from . import bright
+
+        return getattr(bright, name)
     if name in ("evaluate_answers",):
         from .ragas_runner import evaluate_answers
 

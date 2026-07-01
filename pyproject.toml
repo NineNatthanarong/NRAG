@@ -46,6 +46,9 @@ dev = [
     "mypy",
 ]
 
+[project.scripts]
+kapi = "kapi.cli:main"
+
 [project.urls]
 Homepage = "https://github.com/NineNatthanarong/Kapi"
 
