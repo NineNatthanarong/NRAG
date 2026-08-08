@@ -77,8 +77,15 @@ rag.add([Document(doc_id="d1", text="...", source="d1.md", metadata={"team": "bi
 
 for h in rag.search("how do refunds work?", k=5):
     print(f"{h.score:.3f}  {h.source}\n   {h.text[:100]}")
+
+for h in rag.search_docs("how do refunds work?", k=3):   # one hit per *document*
+    print(f"{h.score:.3f}  {h.chunk.doc_id}")
 rag.close()
 ```
+
+The lexical core is benchmark-tuned: v0.1.4 defaults clear the published Anserini BM25
+anchor on BEIR scifact, nfcorpus, and fiqa at $0 query cost — grids and reproduction
+commands in [`benchmarks/lexical_tuning_v014.md`](benchmarks/lexical_tuning_v014.md).
 
 ### 2 · Plug in any LLM
 

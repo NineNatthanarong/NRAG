@@ -4,6 +4,38 @@ All notable changes to NRAG are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/)
 (pre-1.0: minor versions may break APIs).
 
+## [0.1.4] — unreleased
+
+Retrieval-quality release: the lexical core was benchmarked on four BEIR datasets and
+re-tuned. **nDCG@10 improves on every dataset×engine tested, up to +0.066, at $0 query
+cost.** Full grids and reproduction commands: `benchmarks/lexical_tuning_v014.md`.
+
+### Changed (affects ranking — re-run your own evals if you tuned weights)
+
+- **Default field weights**: `ngram 0.6 → 0.3`, `title 2.5 → 0.5`. The old title boost
+  was the single largest source of lost precision on all four benchmarked datasets
+  (SciFact +0.021, NFCorpus +0.011, FiQA +0.008, ArguAna +0.004 nDCG@10 vs old defaults).
+- **Single-field engines (SQLite/bm25s path) now honor `FieldWeights`**: legs are fused
+  by weighted convex combination (min-max normalized) instead of unweighted RRF, matching
+  Tantivy's semantics. SciFact/sqlite: **0.6304 → 0.6965 (+0.066)**. `fusion="rrf"` remains
+  available; `rrf_k` default 60 → 10 (low k won every RRF sweep). Zero-weight legs are
+  skipped entirely.
+- The two-leg CSC fusion is decoupled from the engine fusion default via `csc_fusion`
+  (stays `"rrf"`, the setting the compiled-preset results were validated with).
+
+### Added
+
+- **`Nrag.search_docs(query, k, agg="max"|"sum")`** — document-level retrieval (one hit
+  per source document, aggregated over its chunks).
+- **Tunable BM25 parameters**: `Nrag(bm25_k1=..., bm25_b=...)`, honored by the bm25s
+  engine (tantivy/SQLite ship fixed upstream parameters and document that).
+- **Dependency-free BEIR evaluation**: `nrag.eval.load_beir` falls back to a
+  standard-library loader when the `beir` package is absent — quality evals now run on
+  the core install.
+- **Checked-in, reproducible benchmark harness** (`benchmarks/lexical_grid.py`) with
+  per-run provenance logging (`benchmarks/grid_results.jsonl`) — replaces the
+  previously-referenced `scratch/` scripts.
+
 ## [0.1.3] — unreleased
 
 ### Fixed
