@@ -53,6 +53,9 @@ class Config:
     consensus_min_agreement: float = 0.5  # keep an expansion term iff it recurs in >= this fraction
     literal_floor: float = 1.0            # anchoring floor weight for source-literal terms in Leg B
     csc_leg_weights: tuple = (1.0, 1.0)   # (legA, legB) weights for convex two-leg fusion
+    # Fusion for the two-leg (lexical + CSC) combination — kept on RRF, the setting the
+    # compiled-preset benchmarks were validated with; independent of ``fusion`` below.
+    csc_fusion: Literal["rrf", "convex"] = "rrf"
 
     # ---- adaptive query router (Phase 3, §5 Pillar 5): the only query-time LLM use ----
     # Cheap by default, accurate on demand. The first lexical pass is ~1 ms / $0; a cheap
@@ -75,14 +78,21 @@ class Config:
     # ---- retrieval ----
     k: int = 10                                       # final top-k returned
     retrieve_k: int = 50                              # candidates fetched before truncation
-    fusion: Literal["rrf", "convex"] = "rrf"
-    rrf_k: int = 60
+    # Fusion for single-field engines (SQLite/bm25s). Benchmarked on BEIR
+    # scifact+nfcorpus: convex fusion weighted by the field weights beats unweighted
+    # RRF by +0.07/+0.01 nDCG@10; among RRF variants low k wins (see benchmarks/).
+    fusion: Literal["rrf", "convex"] = "convex"
+    rrf_k: int = 10
     # field weights (mirrors FieldWeights defaults; kept here so presets can tune them)
     weight_body: float = 1.0
-    weight_ngram: float = 0.6
-    weight_title: float = 2.5
+    weight_ngram: float = 0.3
+    weight_title: float = 0.5
     enable_ngram: bool = True
     fuzzy: bool = False
+    # BM25 shape parameters — honored by the bm25s engine (tantivy/SQLite are fixed
+    # at k1=1.2, b=0.75 upstream). None = engine default.
+    bm25_k1: Optional[float] = None
+    bm25_b: Optional[float] = None
 
     # ---- generation ----
     generate_enabled: bool = True                     # auto-False if no LLM

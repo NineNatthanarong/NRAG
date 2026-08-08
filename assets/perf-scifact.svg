@@ -51,15 +51,15 @@
   <rect x="215" y="244" width="582" height="34" rx="5" fill="#cbd5e1"/>
   <text class="val" x="805" y="267">0.7164</text>
 
-  <!-- row 4: Nrag BM25 + trigram 0.6995 NRAG -->
-  <text class="name" x="205" y="315" text-anchor="end" font-weight="700" fill="#6d28d9">Nrag BM25 + trigram</text>
-  <rect x="215" y="292" width="497" height="34" rx="5" fill="url(#nrag)" opacity="0.82"/>
-  <text class="val" x="720" y="315" fill="#6d28d9">0.6995</text>
+  <!-- row 4: Nrag-fast lexical 0.7100 NRAG (v0.1.4 defaults) -->
+  <text class="name" x="205" y="315" text-anchor="end" font-weight="700" fill="#6d28d9">Nrag-fast (lexical)</text>
+  <rect x="215" y="292" width="550" height="34" rx="5" fill="url(#nrag)" opacity="0.82"/>
+  <text class="val" x="773" y="315" fill="#6d28d9">0.7100</text>
 
-  <!-- row 5: Nrag-fast lexical 0.6878 NRAG -->
-  <text class="name" x="205" y="363" text-anchor="end" font-weight="700" fill="#6d28d9">Nrag-fast (lexical)</text>
-  <rect x="215" y="340" width="439" height="34" rx="5" fill="url(#nrag)" opacity="0.82"/>
-  <text class="val" x="662" y="363" fill="#6d28d9">0.6878</text>
+  <!-- row 5: Nrag BM25 + trigram 0.6995 NRAG -->
+  <text class="name" x="205" y="363" text-anchor="end" font-weight="700" fill="#6d28d9">Nrag BM25 + trigram</text>
+  <rect x="215" y="340" width="497" height="34" rx="5" fill="url(#nrag)" opacity="0.82"/>
+  <text class="val" x="720" y="363" fill="#6d28d9">0.6995</text>
 
   <!-- row 6: bge-m3 0.6437 dense -->
   <text class="name" x="205" y="411" text-anchor="end">bge-m3</text>
