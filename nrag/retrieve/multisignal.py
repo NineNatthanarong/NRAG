@@ -37,6 +37,19 @@ def search(
         return []
     candidates = candidates or max(k, 50)
 
+    # Determine up front whether the engine can push down *every* filter clause.
+    # Engines only ever cover a subset of fields (e.g. doc_id/section), so anything
+    # else must be post-filtered here after hydration — silently skipping it would
+    # make metadata filters a no-op (a correctness/data-isolation bug).
+    needs_post_filter = False
+    if filter is not None and not filter.is_empty():
+        covers = getattr(engine, "prefilter_covers", None)
+        fully_covered = bool(covers(filter)) if callable(covers) else False
+        needs_post_filter = not fully_covered
+        if needs_post_filter:
+            # widen the candidate pool so post-filtering can still fill k results
+            candidates = max(candidates, k * 10, 100)
+
     if getattr(engine, "supports_multifield", False):
         hits = engine.search(query, k=candidates, field_weights=field_weights,
                              fuzzy=fuzzy, filter=filter)
@@ -53,10 +66,9 @@ def search(
 
     hits = store.hydrate(hits)
 
-    # safety-net post-filter for anything the engine couldn't pre-filter
-    if filter is not None and not filter.is_empty():
-        if not getattr(engine, "supports_prefilter", False):
-            hits = [h for h in hits if h.chunk is not None and filter.matches(h.chunk)]
+    # residual post-filter for every clause the engine didn't fully pre-filter
+    if needs_post_filter:
+        hits = [h for h in hits if h.chunk is not None and filter.matches(h.chunk)]
 
     for rank, h in enumerate(hits[:k], start=1):
         h.rank = rank

@@ -55,6 +55,15 @@ class IndexEngine(Protocol):
     def supports_multifield(self) -> bool: ...
     @property
     def supports_prefilter(self) -> bool: ...
+    def prefilter_covers(self, filter: Optional[MetaFilter]) -> bool:
+        """True iff *every* clause of ``filter`` is pushed down into the engine query.
+
+        Engines that only push down a subset of fields (e.g. ``doc_id``/``section``)
+        must return False for filters touching anything else, so the retrieve layer
+        applies the residual pure-Python post-filter. Default: nothing is covered.
+        """
+        return filter is None or filter.is_empty()
+
     def stats(self) -> dict: ...
 
 

@@ -256,6 +256,19 @@ class TantivyEngine:
     def supports_prefilter(self) -> bool:
         return True
 
+    #: filter fields this engine can push down into the index query
+    PREFILTER_FIELDS = frozenset({"doc_id", "section"})
+
+    def prefilter_covers(self, filter: Optional[MetaFilter]) -> bool:
+        """Only ``doc_id``/``section`` clauses are translated by ``_filter_clauses``;
+        arbitrary metadata keys and ``mtime_after`` need the residual post-filter."""
+        if filter is None or filter.is_empty():
+            return True
+        if filter.mtime_after is not None:
+            return False
+        keys = set(filter.equals) | set(filter.any_of)
+        return keys <= self.PREFILTER_FIELDS
+
     def stats(self) -> dict:
         try:
             num = self.index.searcher().num_docs

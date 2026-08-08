@@ -162,6 +162,19 @@ class SQLiteFTS5Engine:
     def supports_prefilter(self) -> bool:
         return True
 
+    #: filter fields this engine can push down into the FTS query
+    PREFILTER_FIELDS = frozenset({"doc_id", "section"})
+
+    def prefilter_covers(self, filter: Optional[MetaFilter]) -> bool:
+        """Only ``doc_id``/``section`` clauses are translated by ``_filter_sql``;
+        arbitrary metadata keys and ``mtime_after`` need the residual post-filter."""
+        if filter is None or filter.is_empty():
+            return True
+        if filter.mtime_after is not None:
+            return False
+        keys = set(filter.equals) | set(filter.any_of)
+        return keys <= self.PREFILTER_FIELDS
+
     def stats(self) -> dict:
         n = self.conn.execute("SELECT COUNT(*) FROM chunks_fts").fetchone()[0]
         return {"engine": "sqlite", "path": self.path, "num_chunks": n,

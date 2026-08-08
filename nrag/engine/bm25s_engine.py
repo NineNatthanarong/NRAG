@@ -144,6 +144,10 @@ class InMemoryBM25Engine:
     def supports_prefilter(self) -> bool:
         return False  # retrieve layer post-filters using hydrated chunks
 
+    def prefilter_covers(self, filter: Optional[MetaFilter]) -> bool:
+        """No pushdown at all: every non-empty filter needs the residual post-filter."""
+        return filter is None or filter.is_empty()
+
     def stats(self) -> dict:
         return {"engine": "bm25s", "path": self.path, "num_chunks": len(self._ids),
                 "ngram": False}
