@@ -26,9 +26,13 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Run test suite before building
+        run: |
+          python -m pip install -e ".[bm25s]" pytest
+          python -m pytest -q -m "not eval and not live_llm"
+
       - name: Build release distributions
         run: |
-          # NOTE: put your own distribution build steps here.
           python -m pip install build
           python -m build
 

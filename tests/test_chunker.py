@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from nrag._types import Document, attach_context
-from nrag.ingest.chunker import Chunker, ChunkConfig
+from nrag.ingest.chunker import ChunkConfig, Chunker
 
 
 def _doc(text, ctype="markdown"):

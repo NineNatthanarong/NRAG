@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from nrag import Nrag, MetaFilter
+from nrag import MetaFilter, Nrag
 
 ENGINES = ["tantivy", "sqlite", "bm25s"]
 

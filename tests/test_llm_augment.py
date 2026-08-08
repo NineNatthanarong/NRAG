@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from nrag import Nrag, Config
+from nrag import Config, Nrag
 from nrag._types import Chunk, Hit
 from nrag.augment.expand import QueryExpander
 from nrag.generate.answer import Generator

@@ -26,7 +26,7 @@ def to_langchain_retriever(nrag, *, k=None):
     class NragRetriever(BaseRetriever):
         """LangChain retriever that delegates to a NRAG index (no embeddings, no vector DB)."""
 
-        def _get_relevant_documents(self, query, *, run_manager=None):   # noqa: D401
+        def _get_relevant_documents(self, query, *, run_manager=None):
             return [
                 Document(
                     page_content=r["text"],

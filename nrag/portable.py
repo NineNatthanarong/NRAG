@@ -52,9 +52,7 @@ def _should_include(rel: str, *, include_cache: bool) -> bool:
     parts = rel.split(os.sep)
     if not include_cache and parts and parts[0] == _CACHE_DIR:
         return False                       # LLM cache: not needed to serve
-    if rel.endswith(_EXCLUDE_SUFFIXES):
-        return False                       # transient lock / tmp files
-    return True
+    return not rel.endswith(_EXCLUDE_SUFFIXES)  # excludes transient lock / tmp files
 
 
 def _iter_index_files(index_dir: str, *, include_cache: bool) -> List[str]:

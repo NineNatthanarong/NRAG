@@ -127,7 +127,7 @@ class InMemoryBM25Engine:
         results, scores = self._retriever.retrieve(
             q_tokens, corpus=self._ids, k=k, return_as="tuple", show_progress=False)
         hits: List[Hit] = []
-        for rank, (cid, score) in enumerate(zip(results[0], scores[0]), start=1):
+        for rank, (cid, score) in enumerate(zip(results[0], scores[0], strict=False), start=1):
             hits.append(Hit(chunk_id=str(cid), score=float(score), rank=rank, signal="body"))
         return hits
 

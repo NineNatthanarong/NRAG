@@ -5,7 +5,6 @@ from __future__ import annotations
 import pytest
 
 from nrag._types import Document
-from nrag.llm import CallableLLM
 
 # (doc_id, title, body) — distinct topics, a typo target, near-duplicate algorithms.
 CORPUS = [

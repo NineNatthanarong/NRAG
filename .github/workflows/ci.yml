@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: test (py${{ matrix.python-version }}, ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        include:
+          - os: macos-latest
+            python-version: "3.12"
+          - os: windows-latest
+            python-version: "3.12"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install (core + test deps)
+        run: |
+          python -m pip install -U pip
+          python -m pip install -e . pytest pytest-cov
+      - name: Run tests (core install)
+        run: python -m pytest -q -m "not eval and not live_llm"
+      - name: Install optional extras
+        run: python -m pip install -e ".[openai,bm25s]"
+      - name: Run tests (with extras)
+        run: python -m pytest -q -m "not eval and not live_llm" --cov=nrag --cov-report=term
+
+  lint:
+    name: lint & format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install ruff
+      - name: Ruff lint
+        run: ruff check nrag tests
+      - name: Ruff format check
+        run: ruff format --check nrag tests
+        continue-on-error: true  # ratchet: enforce once the codebase is formatted
+
+  typecheck:
+    name: type check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install mypy
+      - name: mypy (non-blocking baseline)
+        run: mypy nrag --ignore-missing-imports --no-strict-optional
+        continue-on-error: true  # ratchet: tighten as annotations are completed
+
+  build:
+    name: build & install smoke test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install build
+      - name: Build wheel + sdist
+        run: python -m build
+      - name: Install wheel in a clean venv and smoke test
+        run: |
+          python -m venv /tmp/smoke
+          /tmp/smoke/bin/pip install dist/*.whl
+          /tmp/smoke/bin/nrag --version
+          /tmp/smoke/bin/python - << 'PY'
+          from nrag import Nrag
+          rag = Nrag(preset="fast")
+          rag.add_texts(["Dijkstra finds shortest paths.", "Tomato soup needs basil."])
+          hits = rag.search("shortest path", k=1)
+          assert hits and "Dijkstra" in hits[0].text, hits
+          import nrag
+          print("smoke OK, version", nrag.__version__)
+          PY
+      - name: Check py.typed shipped
+        run: |
+          python - << 'PY'
+          import zipfile, glob, sys
+          whl = glob.glob("dist/*.whl")[0]
+          names = zipfile.ZipFile(whl).namelist()
+          assert "nrag/py.typed" in names, names
+          print("py.typed present")
+          PY

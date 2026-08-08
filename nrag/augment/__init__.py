@@ -7,4 +7,4 @@ from .compiler import CompiledBundle, Compiler
 from .contextual import ContextualIndexer
 from .expand import ExpandedQuery, QueryExpander
 
-__all__ = ["Compiler", "CompiledBundle", "ContextualIndexer", "QueryExpander", "ExpandedQuery"]
+__all__ = ["CompiledBundle", "Compiler", "ContextualIndexer", "ExpandedQuery", "QueryExpander"]

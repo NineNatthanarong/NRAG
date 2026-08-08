@@ -237,7 +237,7 @@ class TantivyEngine:
             if key in filter.equals:
                 clauses.append((Occur.Must,
                                 Query.term_query(self.schema, key, str(filter.equals[key]))))
-            if key in filter.any_of and filter.any_of[key]:
+            if filter.any_of.get(key):
                 subs = [(Occur.Should, Query.term_query(self.schema, key, str(v)))
                         for v in filter.any_of[key]]
                 clauses.append((Occur.Must, Query.boolean_query(subs)))

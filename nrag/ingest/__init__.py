@@ -15,15 +15,15 @@ from .loaders import (
 )
 
 __all__ = [
-    "Chunker",
-    "ChunkConfig",
-    "Chunk",
-    "Loader",
-    "TextLoader",
-    "MarkdownLoader",
-    "HTMLLoader",
-    "PDFTextLoader",
     "DEFAULT_LOADERS",
-    "load_paths",
+    "Chunk",
+    "ChunkConfig",
+    "Chunker",
+    "HTMLLoader",
+    "Loader",
+    "MarkdownLoader",
+    "PDFTextLoader",
+    "TextLoader",
     "documents_from_texts",
+    "load_paths",
 ]

@@ -84,3 +84,16 @@ markers = [
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+
+[tool.ruff.lint]
+# Conservative baseline focused on real bugs; ratchet stricter over time.
+select = ["E", "F", "W", "I", "B", "SIM", "RUF"]
+ignore = [
+    "E501",    # line length handled by the formatter
+    "B008",    # dataclass-style default args (FieldWeights()) are intentional here
+    "SIM105",  # contextlib.suppress rewrites not always clearer
+    "RUF012",  # ClassVar annotations — not enforcing yet
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011", "SIM"]

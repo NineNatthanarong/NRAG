@@ -26,26 +26,26 @@ from ._types import (
 from .config import Config
 from .results import AddReport, Answer, Citation, CostEstimate, CostGuardError, QueryResult
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 
 __all__ = [
-    "Nrag",
-    "Config",
-    "Document",
-    "Chunk",
-    "Hit",
-    "FieldWeights",
-    "MetaFilter",
-    "EngineConfig",
-    "QueryResult",
-    "Answer",
-    "Citation",
     "AddReport",
+    "Answer",
+    "Chunk",
+    "Citation",
+    "Config",
     "CostEstimate",
     "CostGuardError",
+    "Document",
+    "EngineConfig",
+    "FieldWeights",
+    "Hit",
+    "MetaFilter",
+    "Nrag",
+    "QueryResult",
+    "__version__",
     "attach_context",
     "content_hash",
-    "__version__",
 ]
 
 

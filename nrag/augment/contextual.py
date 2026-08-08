@@ -169,7 +169,7 @@ class ContextualIndexer:
                 system=_SYSTEM,
             )
             new_cache: list[tuple[str, str]] = []
-            for (key, chunk, _p), blurb in zip(to_gen, blurbs):
+            for (key, chunk, _p), blurb in zip(to_gen, blurbs, strict=False):
                 blurb = (blurb or "").strip()
                 attach_context(chunk, blurb)
                 new_cache.append((key, blurb))

@@ -117,7 +117,7 @@ def format_report(inp: TCOInputs, res: TCOResult) -> str:
         f"traffic: {inp.queries_per_month:,} queries/mo x {inp.tokens_per_query} tok",
         "  ---------------------------------------------------------------",
         f"  NRAG   one-time compile : ${res.nrag_index_one_time:,.2f}",
-        f"  NRAG   per-query cost    : $0.00   (lexical, no model, no vector RAM)",
+        "  NRAG   per-query cost    : $0.00   (lexical, no model, no vector RAM)",
         f"  NRAG   {res.months}-month total   : ${res.nrag_total:,.2f}",
         "  ---------------------------------------------------------------",
         f"  dense  one-time embed    : ${res.dense_index_one_time:,.2f}",

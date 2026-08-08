@@ -11,17 +11,17 @@ from .ir_metrics import (
 )
 
 __all__ = [
+    "evaluate_answers",
     "evaluate_run",
+    "load_beir",
+    "load_bright",
     "ndcg_at_k",
-    "recall_at_k",
     "precision_at_k",
+    "recall_at_k",
     "reciprocal_rank",
     "run_beir",
-    "load_beir",
     "run_bright",
     "run_bright_all",
-    "load_bright",
-    "evaluate_answers",
 ]
 
 

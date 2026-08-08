@@ -18,10 +18,7 @@ _WORD_RE = re.compile(r"\w+", re.UNICODE)
 # A short, conservative English stopword list (user-overridable). Kept intentionally
 # small: aggressive stopwording hurts more than it helps for BM25 in practice.
 DEFAULT_STOPWORDS = frozenset(
-    """
-    a an and are as at be but by for if in into is it no not of on or such that the
-    their then there these they this to was will with from we you your i he she his her
-    """.split()
+    ["a", "an", "and", "are", "as", "at", "be", "but", "by", "for", "if", "in", "into", "is", "it", "no", "not", "of", "on", "or", "such", "that", "the", "their", "then", "there", "these", "they", "this", "to", "was", "will", "with", "from", "we", "you", "your", "i", "he", "she", "his", "her"]
 )
 
 # snowballstemmer language names differ slightly from common usage; map the ones we use.

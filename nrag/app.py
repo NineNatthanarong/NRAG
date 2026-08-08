@@ -18,7 +18,7 @@ from typing import Iterable, Iterator, List, Optional, Union
 from ._types import Chunk, Document, EngineConfig, FieldWeights, Hit, MetaFilter, content_hash
 from .config import Config
 from .engine.base import open_engine
-from .ingest.chunker import Chunker, ChunkConfig
+from .ingest.chunker import ChunkConfig, Chunker
 from .ingest.loaders import documents_from_texts, load_paths
 from .results import AddReport, Citation, CostEstimate, QueryResult
 from .retrieve import fuse, multisignal, router

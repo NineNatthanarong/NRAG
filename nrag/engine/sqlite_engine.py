@@ -143,7 +143,7 @@ class SQLiteFTS5Engine:
             if key in filter.equals:
                 clauses.append(f"{key} = ?")
                 params.append(str(filter.equals[key]))
-            if key in filter.any_of and filter.any_of[key]:
+            if filter.any_of.get(key):
                 marks = ",".join("?" * len(filter.any_of[key]))
                 clauses.append(f"{key} IN ({marks})")
                 params.extend(str(v) for v in filter.any_of[key])

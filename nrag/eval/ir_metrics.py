@@ -120,7 +120,9 @@ def evaluate_run(
 
 def _evaluate_external(qrels, run, metrics, backend):  # pragma: no cover - optional deps
     if backend == "ranx":
-        from ranx import Qrels as RQ, Run as RR, evaluate
+        from ranx import Qrels as RQ
+        from ranx import Run as RR
+        from ranx import evaluate
 
         scores = evaluate(RQ(qrels), RR(run), [m.lower().replace("@", "@") for m in metrics])
         if isinstance(scores, dict):

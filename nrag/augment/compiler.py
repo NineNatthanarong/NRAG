@@ -260,7 +260,7 @@ class Compiler:
             self.cache.put_many(new_cache)
 
         out: Dict[str, CompiledBundle] = {}
-        for doc, c in items:
+        for _doc, c in items:
             bundle = self._bundle_from_record(records.get(c.chunk_id, {}), c)
             attach_context(c, bundle.enrichment_text())     # enrich Leg A's indexed_text
             out[c.chunk_id] = bundle
