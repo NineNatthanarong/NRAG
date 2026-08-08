@@ -54,15 +54,24 @@ def search(
         hits = engine.search(query, k=candidates, field_weights=field_weights,
                              fuzzy=fuzzy, filter=filter)
     else:
-        # Path B: query each signal separately, then fuse.
-        rank_lists = []
+        # Path B: query each signal separately, then fuse. Zero-weight legs are
+        # skipped entirely; convex fusion (default) mirrors the configured field
+        # weights so single-field engines honor FieldWeights like Tantivy does.
+        fw_map = field_weights.as_dict()
+        rank_lists, leg_weights = [], []
         for signal in ("body", "ngram", "title"):
+            w = fw_map.get(signal, 1.0)
+            if w <= 0:
+                continue
             sub = engine.search(query, k=candidates, signal=signal, field_weights=field_weights,
                                 fuzzy=fuzzy, filter=filter)
             if sub:
                 rank_lists.append(sub)
-        method = "convex" if (fusion == "convex" and weights) else "rrf"
-        hits = _fuse.fuse(rank_lists, method=method, k=rrf_k, weights=weights)
+                leg_weights.append(w)
+        if fusion == "convex":
+            hits = _fuse.fuse(rank_lists, method="convex", weights=list(weights or leg_weights))
+        else:
+            hits = _fuse.fuse(rank_lists, method="rrf", k=rrf_k, weights=weights)
 
     hits = store.hydrate(hits)
 

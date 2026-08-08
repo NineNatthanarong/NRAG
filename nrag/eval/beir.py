@@ -48,19 +48,62 @@ class BeirReport:
         return "\n".join(lines)
 
 
+_BEIR_URL = "https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/{name}.zip"
+
+
 def load_beir(dataset: str = "scifact", split: str = "test", data_dir: str = "datasets"):
-    """Download (if needed) and load a BEIR dataset. Returns (corpus, queries, qrels)."""
+    """Download (if needed) and load a BEIR dataset. Returns (corpus, queries, qrels).
+
+    Uses the ``beir`` package when installed; otherwise falls back to a
+    standard-library loader (BEIR's on-disk format is plain jsonl + tsv), so
+    ``run_beir`` works without the heavy ``nrag[eval]`` dependency chain.
+    """
     try:
         from beir import util  # type: ignore
         from beir.datasets.data_loader import GenericDataLoader  # type: ignore
-    except Exception as exc:  # pragma: no cover - optional dep
-        raise RuntimeError("BEIR eval requires: pip install nrag[eval]") from exc
+    except ImportError:
+        return _load_beir_stdlib(dataset, split, data_dir)
 
-    url = (f"https://public.ukp.informatik.tu-darmstadt.de/thakur/BEIR/datasets/"
-           f"{dataset}.zip")
-    path = util.download_and_unzip(url, data_dir)
+    path = util.download_and_unzip(_BEIR_URL.format(name=dataset), data_dir)
     # a fresh loader per split (reusing one across splits raises KeyError in BEIR)
     return GenericDataLoader(data_folder=path).load(split=split)
+
+
+def _load_beir_stdlib(dataset: str, split: str, data_dir: str):
+    """Parse the BEIR zip format with the standard library only."""
+    import io
+    import json
+    import os
+    import urllib.request
+    import zipfile
+
+    root = os.path.join(data_dir, dataset)
+    if not os.path.exists(os.path.join(root, "corpus.jsonl")):
+        os.makedirs(data_dir, exist_ok=True)
+        with urllib.request.urlopen(_BEIR_URL.format(name=dataset)) as resp:
+            data = resp.read()
+        zipfile.ZipFile(io.BytesIO(data)).extractall(data_dir)
+
+    corpus: Dict[str, dict] = {}
+    with open(os.path.join(root, "corpus.jsonl"), encoding="utf-8") as fh:
+        for line in fh:
+            d = json.loads(line)
+            corpus[str(d["_id"])] = {"title": d.get("title", ""), "text": d.get("text", "")}
+
+    queries: Dict[str, str] = {}
+    with open(os.path.join(root, "queries.jsonl"), encoding="utf-8") as fh:
+        for line in fh:
+            d = json.loads(line)
+            queries[str(d["_id"])] = d["text"]
+
+    qrels: Dict[str, Dict[str, int]] = {}
+    with open(os.path.join(root, "qrels", f"{split}.tsv"), encoding="utf-8") as fh:
+        next(fh)  # header
+        for line in fh:
+            qid, did, score = line.rstrip("\n").split("\t")
+            qrels.setdefault(qid, {})[did] = int(score)
+    queries = {qid: q for qid, q in queries.items() if qid in qrels}
+    return corpus, queries, qrels
 
 
 def corpus_to_documents(corpus: Dict[str, dict]):

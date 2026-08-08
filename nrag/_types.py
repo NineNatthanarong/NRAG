@@ -91,13 +91,15 @@ class Hit:
 class FieldWeights:
     """Per-field boosts for multi-signal lexical retrieval.
 
-    Defaults reflect the research recommendation: words carry the signal, the
-    char-ngram field is a softer typo/morphology booster, titles are boosted.
+    Defaults reflect the benchmark grid (BEIR scifact/nfcorpus/fiqa/arguana, see
+    benchmarks/lexical_grid.py): words carry the signal, the char-ngram field is a
+    soft typo/morphology booster (0.3), and a gentle title boost (0.5) — large title
+    boosts consistently hurt ranking across all four datasets.
     """
 
     body: float = 1.0
-    ngram: float = 0.6
-    title: float = 2.5
+    ngram: float = 0.3
+    title: float = 0.5
 
     def as_dict(self) -> dict[str, float]:
         return {"body": self.body, "ngram": self.ngram, "title": self.title}
@@ -149,6 +151,10 @@ class EngineConfig:
     ascii_fold: bool = True
     writer_heap_bytes: int = 128 * 1024 * 1024
     writer_threads: int = 1
+    # BM25 parameters. Honored by the bm25s engine; tantivy and SQLite FTS5 ship
+    # fixed k1=1.2/b=0.75 and ignore these (documented engine capability difference).
+    bm25_k1: Optional[float] = None
+    bm25_b: Optional[float] = None
 
 
 def attach_context(chunk: Chunk, blurb: str) -> Chunk:

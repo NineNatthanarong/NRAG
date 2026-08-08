@@ -56,7 +56,8 @@ class Nrag:
 
         self.chunker = Chunker(chunk_config)
         self._engine_config = EngineConfig(
-            language=self.config.language, enable_ngram=self.config.enable_ngram
+            language=self.config.language, enable_ngram=self.config.enable_ngram,
+            bm25_k1=self.config.bm25_k1, bm25_b=self.config.bm25_b,
         )
         self.engine = open_engine(self.config.engine, path=self.config.path,
                                   config=self._engine_config)
@@ -197,6 +198,38 @@ class Nrag:
         expanded = self._expand(query)
         return self._dispatch(query, expanded, k, candidates, filter)
 
+    def search_docs(self, query: str, k: Optional[int] = None, *,
+                    filter: Optional[MetaFilter] = None,
+                    agg: str = "max") -> List[Hit]:
+        """Document-level search: chunk hits aggregated to one hit per source document.
+
+        Returns the best chunk of each document, re-scored at document granularity
+        (``agg="max"``: the document's score is its best chunk's score — the same
+        max-pooling used by BEIR-style document-level evaluation; ``agg="sum"``:
+        the sum of its retrieved chunks' scores, which favors documents with many
+        matching chunks).
+        """
+        k = k or self.config.k
+        if agg not in ("max", "sum"):
+            raise ValueError(f"unknown agg {agg!r}; expected 'max' or 'sum'")
+        # over-fetch chunks so k *distinct documents* can be filled
+        chunk_hits = self.search(query, k=max(self.config.retrieve_k, k * 10), filter=filter)
+        agg_score: dict[str, float] = {}
+        best: dict[str, Hit] = {}
+        for h in chunk_hits:
+            did = h.chunk.doc_id if h.chunk is not None else h.chunk_id.split("::", 1)[0]
+            if did not in best or h.score > best[did].score:
+                best[did] = h
+            agg_score[did] = (max(agg_score.get(did, float("-inf")), h.score) if agg == "max"
+                              else agg_score.get(did, 0.0) + h.score)
+        ranked = sorted(agg_score.items(), key=lambda kv: kv[1], reverse=True)[:k]
+        out: List[Hit] = []
+        for rank, (did, score) in enumerate(ranked, start=1):
+            h = best[did]
+            out.append(Hit(chunk_id=h.chunk_id, score=score, rank=rank,
+                           chunk=h.chunk, signal="doc"))
+        return out
+
     def _dispatch(self, raw_query: str, effective_query: str, k: int, candidates: int,
                   filter: Optional[MetaFilter]) -> List[Hit]:
         """Run retrieval for a query string (``effective_query`` may be expansion-augmented).
@@ -262,9 +295,9 @@ class Nrag:
         if not leg_b:
             hits = leg_a
         else:
-            method = "convex" if self.config.fusion == "convex" else "rrf"
+            method = "convex" if self.config.csc_fusion == "convex" else "rrf"
             weights = list(self.config.csc_leg_weights) if method == "convex" else None
-            fused = fuse.fuse([leg_a, leg_b], method=method, k=self.config.rrf_k, weights=weights)
+            fused = fuse.fuse([leg_a, leg_b], method=method, k=60, weights=weights)
             hits = self.store.hydrate(fused)  # fill chunks for Leg-B-only hits
 
         # post-filter any Leg-B-only hits the engine couldn't pre-filter

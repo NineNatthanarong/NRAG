@@ -26,7 +26,7 @@ from ._types import (
 from .config import Config
 from .results import AddReport, Answer, Citation, CostEstimate, CostGuardError, QueryResult
 
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 __all__ = [
     "AddReport",

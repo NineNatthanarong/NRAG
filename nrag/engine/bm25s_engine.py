@@ -110,7 +110,12 @@ class InMemoryBM25Engine:
         corpus = [self._docs[cid] for cid in self._ids]
         tokens = bm25s.tokenize(corpus, stopwords="en" if self.config.stopwords else None,
                                 stemmer=self._stemmer, show_progress=False)
-        retriever = bm25s.BM25()
+        bm25_kw = {}
+        if self.config.bm25_k1 is not None:
+            bm25_kw["k1"] = float(self.config.bm25_k1)
+        if self.config.bm25_b is not None:
+            bm25_kw["b"] = float(self.config.bm25_b)
+        retriever = bm25s.BM25(**bm25_kw)
         retriever.index(tokens, show_progress=False)
         self._retriever = retriever
 
