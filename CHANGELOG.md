@@ -4,7 +4,7 @@ All notable changes to NRAG are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versions follow [SemVer](https://semver.org/)
 (pre-1.0: minor versions may break APIs).
 
-## [0.1.4] — unreleased
+## [0.1.4] — 2026-08-08
 
 Retrieval-quality release: the lexical core was benchmarked on four BEIR datasets and
 re-tuned. **nDCG@10 improves on every dataset×engine tested, up to +0.066, at $0 query
