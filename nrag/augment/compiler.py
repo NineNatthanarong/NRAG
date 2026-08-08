@@ -140,6 +140,16 @@ class _BundleCache:
             self._mem.update(dict(rows))
 
 
+#: compiler section -> Config flag that enables it. "inferences" is governed by
+#: ``compile_reasoning`` (the public name for the inferential-closure pillar).
+_SECTION_FLAGS = {
+    "blurb": "compile_blurb",
+    "questions": "compile_questions",
+    "propositions": "compile_propositions",
+    "inferences": "compile_reasoning",
+}
+
+
 class Compiler:
     """Compiles chunks offline into enriched lexical representations + CSC term weights."""
 
@@ -149,8 +159,8 @@ class Compiler:
         self.model = config.contextual_model or model_name(llm)
         self.cache = _BundleCache(path)
         self._tok = WordTokenizer(config.language)
-        self._sections = [name for name in ("blurb", "questions", "propositions", "inferences")
-                          if getattr(config, f"compile_{name}", True)]
+        self._sections = [name for name, flag in _SECTION_FLAGS.items()
+                          if getattr(config, flag)]
 
     # ------------------------------------------------------------------ sampling params
     @property

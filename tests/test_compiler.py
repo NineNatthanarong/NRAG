@@ -172,3 +172,33 @@ def test_compile_once_serve_without_llm(tmp_path):
     hits = reopened.search("cheapest route between nodes", k=2)
     assert hits and hits[0].chunk.doc_id == "dijkstra"   # Leg B serves model-free
     reopened.close()
+
+
+# ---------------------------------------------------------------- compile flags
+def test_compile_flags_control_sections():
+    """Every ``compile_*`` flag must actually gate its section (regression:
+    ``compile_reasoning=False`` was a no-op because the compiler looked up a
+    non-existent ``compile_inferences`` attribute)."""
+    llm = CompilerFakeLLM()
+
+    assert Compiler(llm, Config.compiled(), None)._sections == [
+        "blurb", "questions", "propositions", "inferences"]
+
+    c = Compiler(llm, Config.compiled(compile_reasoning=False), None)
+    assert "inferences" not in c._sections
+
+    c = Compiler(llm, Config.compiled(compile_blurb=False), None)
+    assert "blurb" not in c._sections and "inferences" in c._sections
+
+    c = Compiler(llm, Config.compiled(compile_questions=False, compile_propositions=False), None)
+    assert c._sections == ["blurb", "inferences"]
+
+
+def test_compile_reasoning_off_removes_inferences_from_prompt_and_cache_key():
+    llm = CompilerFakeLLM()
+    on = Compiler(llm, Config.compiled(), None)
+    off = Compiler(llm, Config.compiled(compile_reasoning=False), None)
+    chunk = Chunk(chunk_id="d::0", doc_id="d", ordinal=0,
+                  raw_text="Dijkstra computes shortest paths.",
+                  indexed_text="Dijkstra computes shortest paths.")
+    assert on._key(chunk) != off._key(chunk)  # flag participates in the cache key
