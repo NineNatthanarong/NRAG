@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use NRAG in your research, please cite it as below."
+title: "NRAG: Compiled Retrieval — embedding-free RAG"
+authors:
+  - family-names: "Natthanarong"
+    given-names: "Nine"
+repository-code: "https://github.com/NineNatthanarong/NRAG"
+url: "https://github.com/NineNatthanarong/NRAG"
+license: MIT
+keywords:
+  - retrieval
+  - RAG
+  - BM25
+  - sparse-retrieval
+  - embedding-free
+  - information-retrieval
+abstract: >-
+  NRAG compiles documents once with an LLM into an enriched, purely lexical index
+  (contextual blurbs, doc2query questions, propositions, reasoning expansions, and
+  consensus-weighted sparse terms); every query afterwards is pure BM25 — no embedding
+  model, no vector database, no GPU, at zero marginal query cost.

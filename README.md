@@ -9,7 +9,7 @@
 ![embeddings](https://img.shields.io/badge/embedding_model-none-7c3aed)
 ![vector db](https://img.shields.io/badge/vector_DB-none-7c3aed)
 ![query cost](https://img.shields.io/badge/query_cost-%240-06b6d4)
-![tests](https://img.shields.io/badge/tests-87_passing-22c55e)
+[![CI](https://github.com/NineNatthanarong/NRAG/actions/workflows/ci.yml/badge.svg)](https://github.com/NineNatthanarong/NRAG/actions/workflows/ci.yml)
 
 **Compile once. Search forever.**
 
@@ -154,7 +154,7 @@ nrag import ship.nrag.tgz --index ./served         # unpack on the target machin
 nrag query  "how do refunds work?" --index ./served   # $0, ~1 ms, no model, no network
 ```
 
-**Or host the compiler.** Clients send documents and get back a ready-to-serve bundle. The embedding model never exists, so it never leaves your walls.
+**Or host the compiler.** Clients send documents and get back a ready-to-serve bundle. The embedding model never exists, so it never leaves your walls. (`nrag serve` is a development tool — no auth or TLS yet; keep it on localhost or a trusted network.)
 
 ```bash
 nrag serve --base-url http://localhost:11434/v1/ --model llama3.2   # POST /compile, GET /bundle/<job>
@@ -254,7 +254,7 @@ OPENROUTER_API_KEY=... python benchmarks/csc_eval.py compiled --index ./idx_csc 
 ```bash
 pip install "nrag[eval]"
 export NRAG_LLM_BASE_URL=... NRAG_LLM_MODEL=... NRAG_LLM_API_KEY=...   # any OpenAI-compatible endpoint
-python -m pytest                                                        # 87 passing, 3 opt-in skipped
+python -m pytest -m "not eval and not live_llm"   # deterministic suite (a few tests skip without nrag[bm25s])
 ```
 
 ---
@@ -322,7 +322,7 @@ rag = Nrag(preset="fast", engine="sqlite", path="./idx")
 pip install nrag                # core: tantivy + stemmer + http client. No models, ever.
 pip install "nrag[openai]"      # openai SDK + tiktoken (exact token counts)
 pip install "nrag[bm25s]"       # in-memory bm25s engine
-pip install "nrag[pdf,html]"    # PDF text + fast HTML loaders
+pip install "nrag[pdf]"         # PDF text loader (HTML/Markdown handled built-in)
 pip install "nrag[eval]"        # ranx / pytrec_eval / BEIR / RAGAS / datasets
 ```
 
