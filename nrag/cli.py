@@ -128,6 +128,9 @@ def cmd_tco(args) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="nrag",
                                      description="Compiled Retrieval — embedding-free RAG.")
+    from . import __version__
+
+    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
     sub = parser.add_subparsers(dest="command", required=True)
 
     pc = sub.add_parser("compile", help="compile/index a dir, file, or glob")

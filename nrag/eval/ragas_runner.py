@@ -2,7 +2,7 @@
 
 Runs questions through an ``Nrag`` instance and scores the generated answers with RAGAS,
 using the LLM you plugged in (wrapped for RAGAS) unless you pass an explicit evaluator
-LLM. Requires:  pip install nrag[eval]   (or nrag[ragas])
+LLM. Requires:  pip install nrag[eval]
 """
 
 from __future__ import annotations

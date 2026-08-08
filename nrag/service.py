@@ -32,9 +32,8 @@ import uuid
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from typing import List, Optional
 
+from . import __version__ as VERSION
 from .portable import export_index
-
-VERSION = "0.1.0"
 
 
 class CompilationService:

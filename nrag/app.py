@@ -24,6 +24,12 @@ from .results import AddReport, Citation, CostEstimate, QueryResult
 from .retrieve import fuse, multisignal, router
 from .store.metadata import DocFingerprint, MetadataStore
 
+
+def _pkg_version() -> str:
+    from . import __version__
+
+    return __version__
+
 Source = Union[str, Document, Iterable[Union[str, Document]]]
 _MANIFEST = "nrag.json"
 
@@ -403,7 +409,7 @@ class Nrag:
         if os.path.exists(mpath):
             return
         data = {
-            "nrag_version": "0.1.0",
+            "nrag_version": _pkg_version(),
             "engine": self.config.engine,
             "language": self.config.language,
             "enable_ngram": self.config.enable_ngram,

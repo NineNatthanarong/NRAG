@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nrag"
-version = "0.1.2"
+dynamic = ["version"]
 description = "Embedding-free RAG. An LLM compiles your documents once; every query stays pure BM25."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -41,7 +41,6 @@ dependencies = [
 openai = ["openai>=1.0", "tiktoken>=0.5"]                 # SDK retries + exact token counts
 bm25s = ["bm25s>=0.2", "numpy>=1.23", "scipy>=1.10"]      # optional in-memory fast-batch engine
 pdf = ["pypdf>=4.0"]
-html = ["selectolax>=0.3"]
 tiktoken = ["tiktoken>=0.5"]
 eval = [
     "ranx>=0.3",
@@ -65,6 +64,9 @@ nrag = "nrag.cli:main"
 Homepage = "https://github.com/NineNatthanarong/NRAG"
 Repository = "https://github.com/NineNatthanarong/NRAG"
 Issues = "https://github.com/NineNatthanarong/NRAG/issues"
+
+[tool.hatch.version]
+path = "nrag/__init__.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["nrag"]

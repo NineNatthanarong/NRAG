@@ -124,7 +124,11 @@ class Config:
             return cls.fast(**overrides)
         if preset == "compiled":
             return cls.compiled(**overrides)
-        return cls.quality(**overrides)
+        if preset == "quality":
+            return cls.quality(**overrides)
+        raise ValueError(
+            f"unknown preset {preset!r}; expected one of: 'fast', 'quality', 'compiled'"
+        )
 
     def for_no_llm(self) -> "Config":
         """Disable every feature that needs an LLM (graceful degradation)."""
