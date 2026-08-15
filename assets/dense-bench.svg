@@ -1,0 +1,139 @@
+<svg viewBox="0 0 1200 1240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dense vs NRAG on BEIR — nDCG@10">
+  <defs>
+    <linearGradient id="nrag" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#7c3aed"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <style>
+      text{font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif}
+      .name{font-size:15px;fill:#0f172a}
+      .val{font-size:14px;font-weight:700;fill:#0f172a}
+      .ax{font-size:12px;fill:#64748b}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="1240" rx="16" fill="#ffffff" stroke="#e2e8f0"/>
+
+  <text x="32" y="42" font-size="23" font-weight="800" fill="#0f172a">Dense vs NRAG · BEIR nDCG@10 (document-level)</text>
+  <text x="32" y="68" font-size="15" fill="#475569">No embedding model, no GPU, no vector DB — Nrag (purple) at $0/query vs four market embedders (gray). Missing bars = not run.</text>
+
+<text x="32" y="110" font-size="20" font-weight="800" fill="#0f172a">scifact</text>
+<text x="32" y="130" font-size="13" fill="#475569">BEIR scifact · 5,183 abstracts · 300 claims</text>
+<g stroke="#e2e8f0" stroke-width="1">
+<line x1="260.0" y1="144" x2="260.0" y2="448"/>
+<line x1="485.0" y1="144" x2="485.0" y2="448"/>
+<line x1="710.0" y1="144" x2="710.0" y2="448"/>
+<line x1="935.0" y1="144" x2="935.0" y2="448"/>
+<line x1="1160.0" y1="144" x2="1160.0" y2="448"/>
+</g>
+<g class="ax" text-anchor="middle">
+<text x="260.0" y="464">0.60</text>
+<text x="485.0" y="464">0.65</text>
+<text x="710.0" y="464">0.70</text>
+<text x="935.0" y="464">0.75</text>
+<text x="1160.0" y="464">0.80</text>
+</g>
+<text class="name" x="248" y="162" text-anchor="end">text-embedding-3-large</text>
+<rect x="260" y="144" width="803.7" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="1073.728870236613" y="162" fill="#0f172a" text-anchor="start">0.7786</text>
+<text class="name" x="248" y="200" text-anchor="end">qwen3-embedding-4b</text>
+<rect x="260" y="182" width="586.8" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="856.8109003649957" y="200" fill="#0f172a" text-anchor="start">0.7304</text>
+<text class="name" x="248" y="238" text-anchor="end" font-weight="800" fill="#6d28d9">★ NRAG + doc2query ×2 (offline LLM)</text>
+<rect x="260" y="220" width="580.9" height="26" rx="5" fill="url(#nrag)" opacity="1"/>
+<text class="val" x="850.9499999999998" y="238" fill="#6d28d9" text-anchor="start">0.7291</text>
+<text class="name" x="248" y="276" text-anchor="end">text-embedding-3-small</text>
+<rect x="260" y="258" width="523.4" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="793.4208779570941" y="276" fill="#0f172a" text-anchor="start">0.7163</text>
+<text class="name" x="248" y="314" text-anchor="end" font-weight="800" fill="#6d28d9">NRAG — pure lexical ($0)</text>
+<rect x="260" y="296" width="494.8" height="26" rx="5" fill="url(#nrag)" opacity="0.85"/>
+<text class="val" x="764.8169257063729" y="314" fill="#6d28d9" text-anchor="start">0.7100</text>
+<text class="name" x="248" y="352" text-anchor="end">normal FTS — BM25 word-only ($0)</text>
+<rect x="260" y="334" width="386.8" height="26" rx="5" fill="#ddd6fe" opacity="1"/>
+<text class="val" x="656.8480098137129" y="352" fill="#0f172a" text-anchor="start">0.6860</text>
+<text class="name" x="248" y="390" text-anchor="end">BM25 (Anserini, published)</text>
+<rect x="260" y="372" width="292.5" height="26" rx="5" fill="#ddd6fe" opacity="1"/>
+<text class="val" x="562.5000000000002" y="390" fill="#0f172a" text-anchor="start">0.6650</text>
+<text class="name" x="248" y="428" text-anchor="end">bge-m3</text>
+<rect x="260" y="410" width="196.1" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="466.08483132499407" y="428" fill="#0f172a" text-anchor="start">0.6436</text>
+<text x="32" y="504" font-size="20" font-weight="800" fill="#0f172a">nfcorpus</text>
+<text x="32" y="524" font-size="13" fill="#475569">BEIR nfcorpus · 3,633 docs · 323 queries</text>
+<g stroke="#e2e8f0" stroke-width="1">
+<line x1="260.0" y1="538" x2="260.0" y2="804"/>
+<line x1="560.0" y1="538" x2="560.0" y2="804"/>
+<line x1="860.0" y1="538" x2="860.0" y2="804"/>
+<line x1="1160.0" y1="538" x2="1160.0" y2="804"/>
+</g>
+<g class="ax" text-anchor="middle">
+<text x="260.0" y="820">0.30</text>
+<text x="560.0" y="820">0.35</text>
+<text x="860.0" y="820">0.40</text>
+<text x="1160.0" y="820">0.45</text>
+</g>
+<text class="name" x="248" y="556" text-anchor="end">text-embedding-3-large</text>
+<rect x="260" y="538" width="743.6" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="1013.6336467531702" y="556" fill="#0f172a" text-anchor="start">0.4239</text>
+<text class="name" x="248" y="594" text-anchor="end">text-embedding-3-small</text>
+<rect x="260" y="576" width="501.9" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="771.9093155110022" y="594" fill="#0f172a" text-anchor="start">0.3837</text>
+<text class="name" x="248" y="632" text-anchor="end">qwen3-embedding-4b</text>
+<rect x="260" y="614" width="347.4" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="617.415564366024" y="632" fill="#0f172a" text-anchor="start">0.3579</text>
+<text class="name" x="248" y="670" text-anchor="end" font-weight="800" fill="#6d28d9">NRAG — pure lexical ($0)</text>
+<rect x="260" y="652" width="219.8" height="26" rx="5" fill="url(#nrag)" opacity="0.85"/>
+<text class="val" x="489.77869424089874" y="670" fill="#6d28d9" text-anchor="start">0.3366</text>
+<text class="name" x="248" y="708" text-anchor="end">BM25 (Anserini, published)</text>
+<rect x="260" y="690" width="150.0" height="26" rx="5" fill="#ddd6fe" opacity="1"/>
+<text class="val" x="420.0000000000001" y="708" fill="#0f172a" text-anchor="start">0.3250</text>
+<text class="name" x="248" y="746" text-anchor="end">normal FTS — BM25 word-only ($0)</text>
+<rect x="260" y="728" width="137.3" height="26" rx="5" fill="#ddd6fe" opacity="1"/>
+<text class="val" x="407.2812110555982" y="746" fill="#0f172a" text-anchor="start">0.3229</text>
+<text class="name" x="248" y="784" text-anchor="end">bge-m3</text>
+<rect x="260" y="766" width="91.8" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="361.7757809191424" y="784" fill="#0f172a" text-anchor="start">0.3153</text>
+<text x="32" y="860" font-size="20" font-weight="800" fill="#0f172a">fiqa</text>
+<text x="32" y="880" font-size="13" fill="#475569">BEIR fiqa · 57,638 docs · 648 queries</text>
+<g stroke="#e2e8f0" stroke-width="1">
+<line x1="260.0" y1="894" x2="260.0" y2="1122"/>
+<line x1="485.0" y1="894" x2="485.0" y2="1122"/>
+<line x1="710.0" y1="894" x2="710.0" y2="1122"/>
+<line x1="935.0" y1="894" x2="935.0" y2="1122"/>
+<line x1="1160.0" y1="894" x2="1160.0" y2="1122"/>
+</g>
+<g class="ax" text-anchor="middle">
+<text x="260.0" y="1138">0.20</text>
+<text x="485.0" y="1138">0.30</text>
+<text x="710.0" y="1138">0.40</text>
+<text x="935.0" y="1138">0.50</text>
+<text x="1160.0" y="1138">0.60</text>
+</g>
+<text class="name" x="248" y="912" text-anchor="end">qwen3-embedding-4b</text>
+<rect x="260" y="894" width="685.6" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="955.6323050160632" y="912" fill="#0f172a" text-anchor="start">0.5047</text>
+<text class="name" x="248" y="950" text-anchor="end">text-embedding-3-small</text>
+<rect x="260" y="932" width="559.5" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="829.4847759774121" y="950" fill="#0f172a" text-anchor="start">0.4487</text>
+<text class="name" x="248" y="988" text-anchor="end">bge-m3</text>
+<rect x="260" y="970" width="479.2" height="26" rx="5" fill="#cbd5e1" opacity="1"/>
+<text class="val" x="749.1873931092762" y="988" fill="#0f172a" text-anchor="start">0.4130</text>
+<text class="name" x="248" y="1026" text-anchor="end" font-weight="800" fill="#6d28d9">NRAG — pure lexical ($0)</text>
+<rect x="260" y="1008" width="115.1" height="26" rx="5" fill="url(#nrag)" opacity="0.85"/>
+<text class="val" x="385.05815433543756" y="1026" fill="#6d28d9" text-anchor="start">0.2511</text>
+<text class="name" x="248" y="1064" text-anchor="end">normal FTS — BM25 word-only ($0)</text>
+<rect x="260" y="1046" width="107.5" height="26" rx="5" fill="#ddd6fe" opacity="1"/>
+<text class="val" x="377.51135176669936" y="1064" fill="#0f172a" text-anchor="start">0.2478</text>
+<text class="name" x="248" y="1102" text-anchor="end">BM25 (Anserini, published)</text>
+<rect x="260" y="1084" width="81.0" height="26" rx="5" fill="#ddd6fe" opacity="1"/>
+<text class="val" x="350.99999999999994" y="1102" fill="#0f172a" text-anchor="start">0.2360</text>
+
+  <g>
+    <rect x="32" y="1182" width="26" height="15" rx="4" fill="url(#nrag)"/>
+    <text x="68" y="1195" font-size="14" fill="#334155">Nrag — no embeddings ($0/query or offline-LLM tier)</text>
+    <rect x="420" y="1182" width="26" height="15" rx="4" fill="#ddd6fe"/>
+    <text x="456" y="1195" font-size="14" fill="#334155">lexical reference — $0/query</text>
+    <rect x="700" y="1182" width="26" height="15" rx="4" fill="#cbd5e1"/>
+    <text x="736" y="1195" font-size="14" fill="#334155">dense embedder — one model pass / query</text>
+  </g>
+  <text class="ax" x="32" y="1222">Per-dataset axis (ticks labelled) · every score costs $0 for the purple/lavender rows · full tables → benchmarks/dense_results.md · regenerate: python benchmarks/plot_dense.py</text>
+</svg>

@@ -35,6 +35,10 @@ No embeddings. No GPU. On BEIR scifact, it still matches a four-billion-paramete
 
 The same question asked wider: four market embedders, three BEIR datasets, every row labelled by cost per query (nDCG@10, document-level; full tables and raw records in [`benchmarks/dense_results.md`](benchmarks/dense_results.md)).
 
+<div align="center">
+<img src="https://github.com/NineNatthanarong/NRAG/blob/main/assets/dense-bench.svg?raw=True" alt="Dense vs NRAG — BEIR nDCG@10, small multiples by dataset" width="860">
+</div>
+
 **`$0` per query** — the lexical tiers:
 
 | System | scifact | nfcorpus | fiqa |
