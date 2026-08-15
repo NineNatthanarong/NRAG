@@ -19,6 +19,7 @@ env/
 
 # ARAG / eval artifacts
 datasets/
+.bench_cache/
 *.sqlite
 .arag_cache/
 index/
@@ -30,3 +31,4 @@ idx_*/
 .idea/
 .vscode/
 /idx_base
+/.reasonix

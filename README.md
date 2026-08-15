@@ -31,6 +31,32 @@ No embeddings. No GPU. On BEIR scifact, it still matches a four-billion-paramete
 
 `Nrag doc2query×2` scores **0.7291 nDCG@10** and **0.7042 MRR**, with no embeddings, no GPU, and no vector database. It ties `qwen3-embedding-4b` and wins on MRR. It clears `text-embedding-3-small` and `bge-m3` outright. Every score here costs **`$0` per query**. Only the 8B embedder finishes ahead. All 30 rows and the ablations live in [`benchmarks/scifact_results.md`](benchmarks/scifact_results.md).
 
+### Dense vs NRAG — three BEIR datasets
+
+The same question asked wider: four market embedders, three BEIR datasets, every row labelled by cost per query (nDCG@10, document-level; full tables and raw records in [`benchmarks/dense_results.md`](benchmarks/dense_results.md)).
+
+**`$0` per query** — the lexical tiers:
+
+| System | scifact | nfcorpus | fiqa |
+|---|---:|---:|---:|
+| NRAG + doc2query×2 *(prior run, offline LLM)* | **0.7291** | — | — |
+| **NRAG (pure lexical)** | 0.7100 | **0.3366** | **0.2511** |
+| normal FTS (BM25 word-only) | 0.6860 | 0.3229 | 0.2478 |
+| BM25 (Anserini, published) | 0.665 | 0.325 | 0.236 |
+
+**embed per query** — the market embedders:
+
+| System | scifact | nfcorpus | fiqa |
+|---|---:|---:|---:|
+| `text-embedding-3-large` | **0.7786** | **0.4239** | —¹ |
+| `qwen3-embedding-4b` | 0.7304 | 0.3579 | **0.5047** |
+| `text-embedding-3-small` | 0.7163 | 0.3837 | 0.4487 |
+| `bge-m3` | 0.6436 | 0.3153 | 0.4130 |
+
+¹ `text-embedding-3-large` on fiqa pending (key budget) — rerun command in the file.
+
+Dense leads on all three — the honest headline. But the **`$0` rows climb together**: on every dataset the tuned lexical core clears both the published BM25 anchor and plain word-only FTS, and with offline doc2query enrichment it sits on `qwen3-embedding-4b`'s scifact number (0.7291 vs 0.7304) at a fraction of the query-time cost.
+
 ### Where embeddings break
 
 Reasoning-heavy retrieval does not reward similarity. The top model on MTEB scores 59. On **BRIGHT**, it scores **18.3**. This is the ground Compiled Retrieval is built for.
@@ -262,6 +288,9 @@ OPENROUTER_API_KEY=... python benchmarks/csc_eval.py compiled --index ./idx_csc 
 pip install "nrag[eval]"
 export NRAG_LLM_BASE_URL=... NRAG_LLM_MODEL=... NRAG_LLM_API_KEY=...   # any OpenAI-compatible endpoint
 python -m pytest -m "not eval and not live_llm"   # deterministic suite (a few tests skip without nrag[bm25s])
+
+# dense-vs-NRAG benchmark (OpenRouter /embeddings; cache in .bench_cache/, gitignored)
+OPENROUTER_API_KEY=... python benchmarks/dense_bench.py --datasets scifact nfcorpus fiqa   # writes benchmarks/dense_results.md
 ```
 
 ---
